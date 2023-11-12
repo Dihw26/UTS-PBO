@@ -1,0 +1,132 @@
+package uts_pbo;
+
+import java.util.ArrayList;
+
+abstract class Pengguna {
+    protected String nama;
+    protected String jenisKelamin;
+
+    public Pengguna(String nama, String jenisKelamin) {
+        this.nama = nama;
+        this.jenisKelamin = jenisKelamin;
+    }
+
+    public abstract void displayInfo();
+}
+
+class User extends Pengguna {
+    public User(String nama, String jenisKelamin) {
+        super(nama, jenisKelamin);
+    }
+
+    @Override
+    public void displayInfo() {
+        System.out.println("---- Informasi User ----");
+        System.out.println("Nama: " + nama);
+        System.out.println("Jenis Kelamin: " + jenisKelamin);
+        System.out.println("------------------------");
+    }
+}
+
+class Admin extends Pengguna {
+    public Admin(String nama, String jenisKelamin) {
+        super(nama, jenisKelamin);
+    }
+
+    @Override
+    public void displayInfo() {
+        System.out.println("---- Informasi Admin ----");
+        System.out.println("Nama: " + nama);
+        System.out.println("Jenis Kelamin: " + jenisKelamin);
+        System.out.println("------------------------");
+    }
+
+    public void tambahBuku(ArrayList<Buku> perpustakaan, Buku buku) {
+        perpustakaan.add(buku);
+        System.out.println("Buku berhasil ditambahkan ke perpustakaan.");
+    }
+
+    public void lihatDaftarBuku(ArrayList<Buku> perpustakaan) {
+        System.out.println("---- Daftar Buku di Perpustakaan ----");
+        for (Buku buku : perpustakaan) {
+            buku.displayInfo();
+        }
+        System.out.println("-------------------------------------");
+    }
+
+    public void hapusBuku(ArrayList<Buku> perpustakaan, Buku buku) {
+        if (perpustakaan.contains(buku)) {
+            perpustakaan.remove(buku);
+            System.out.println("Buku berhasil dihapus dari perpustakaan.");
+        } else {
+            System.out.println("Buku tidak ditemukan dalam perpustakaan.");
+        }
+    }
+}
+
+abstract class Buku {
+    protected String judul;
+    protected String pengarang;
+    protected String genre;
+
+    public Buku(String judul, String pengarang, String genre) {
+        this.judul = judul;
+        this.pengarang = pengarang;
+        this.genre = genre;
+    }
+
+    public abstract void displayInfo();
+}
+
+class BukuFiksi extends Buku {
+    public BukuFiksi(String judul, String pengarang) {
+        super(judul, pengarang, "Fiksi");
+    }
+
+    @Override
+    public void displayInfo() {
+        System.out.println("---- Informasi Buku Fiksi ----");
+        System.out.println("Judul: " + judul);
+        System.out.println("Pengarang: " + pengarang);
+        System.out.println("Genre: " + genre);
+        System.out.println("-----------------------------");
+    }
+}
+
+class BukuNonFiksi extends Buku {
+    public BukuNonFiksi(String judul, String pengarang) {
+        super(judul, pengarang, "Non-Fiksi");
+    }
+
+    @Override
+    public void displayInfo() {
+        System.out.println("---- Informasi Buku Non-Fiksi ----");
+        System.out.println("Judul: " + judul);
+        System.out.println("Pengarang: " + pengarang);
+        System.out.println("Genre: " + genre);
+        System.out.println("---------------------------------");
+    }
+}
+
+public class PerpustakaanMain {
+    public static void main(String[] args) {
+        ArrayList<Buku> perpustakaan = new ArrayList<>();
+
+        User user = new User("User1", "Laki-laki");
+        Admin admin = new Admin("Admin1", "Perempuan");
+
+        user.displayInfo();
+        admin.displayInfo();
+
+        admin.tambahBuku(perpustakaan, new BukuFiksi("Novel A", "Pengarang A"));
+        admin.tambahBuku(perpustakaan, new BukuNonFiksi("Buku B", "Pengarang B"));
+
+        admin.lihatDaftarBuku(perpustakaan);
+
+        user.displayInfo();
+        System.out.println("User hanya dapat melihat daftar buku:");
+        for (Buku buku : perpustakaan) {
+            buku.displayInfo();
+        }
+    }
+}
